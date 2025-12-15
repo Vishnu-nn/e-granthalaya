@@ -25,8 +25,9 @@ const DEPARTMENT_BOOKS = {
             title: "E-Granthalaya User Manual",
             author: 'System Admin',
             description: 'Official user guide for the E-Granthalaya Library Management System. Learn how to borrow, return, and read books.',
-            // Minimal valid PDF base64
-            fileData: 'JVBERi0xLjcKCjEgMCBvYmogICUgZW50cnkgcG9pbnQKPDwKICAvVHlwZSAvQ2F0YWxvZwogIC9QYWdlcyAyIDAgUgo+PgplbmRvYmoKCjIgMCBvYmogICUgcGFnZXM9MQo8XAogIC9UeXBlIC9QYWdlcwogIC9LaWRzIFsgMyAwIFIgXQogIC9Db3VudCAxCj4+CmVuZG9iagoKMyAwIG9iaiAgJSBwYWdlPTEKPDwKICAvVHlwZSAvUGFnZQogIC9QYXJlbnQgMiAwIFIKICAvTWVkaWFCb3ggWyAwIDAgNTAwIDgwMCBdCiAgL0NvbnRlbnRzIDQgMCBSCj4+CmVuZG9iagoKNCAwIG9iagogIDw8IC9MZW5ndGggNTAgPj4Kc3RyZWFtCkJVCjEuMDAwIDAuMDAwIDAuMDAwIHJnCiBTZwovRjEgMzYgVGYKMSAwIDAgMSAxMCA3MDAgVG0KKEUtR3JhbnRoYWxheWEgVXNlciBNYW51YWwpIFRqCkVUCmVuZHN0cmVhbQplbmRvYmoKCnhyZWYKMCA1CjAwMDAwMDAwMDAgNjU1MzUgZgowMDAwMDAwMDEwIDAwMDAwIG4KMDAwMDAwMDA2MCAwMDAwMCBuCjAwMDAwMDAxNTcgMDAwMDAgbgowMDAwMDAwMjcxIDAwMDAwIG4KdHJhaWxlcgo8XAogIC9TaXplIDUKICAvUm9vdCAxIDAgUgo+PgpzdGFydHhyZWYKMzcyCiUlRU9GCg=='
+            // Minimal valid PDF base64 with Data URI prefix
+            fileData: 'data:application/pdf;base64,JVBERi0xLjcKCjEgMCBvYmogICUgZW50cnkgcG9pbnQKPDwKICAvVHlwZSAvQ2F0YWxvZwogIC9QYWdlcyAyIDAgUgo+PgplbmRvYmoKCjIgMCBvYmogICUgcGFnZXM9MQo8XAogIC9UeXBlIC9QYWdlcwogIC9LaWRzIFsgMyAwIFIgXQogIC9Db3VudCAxCj4+CmVuZG9iagoKMyAwIG9iaiAgJSBwYWdlPTEKPDwKICAvVHlwZSAvUGFnZQogIC9QYXJlbnQgMiAwIFIKICAvTWVkaWFCb3ggWyAwIDAgNTAwIDgwMCBdCiAgL0NvbnRlbnRzIDQgMCBSCj4+CmVuZG9iagoKNCAwIG9iagogIDw8IC9MZW5ndGggNTAgPj4Kc3RyZWFtCkJVCjEuMDAwIDAuMDAwIDAuMDAwIHJnCiBTZwovRjEgMzYgVGYKMSAwIDAgMSAxMCA3MDAgVG0KKEUtR3JhbnRoYWxheWEgVXNlciBNYW51YWwpIFRqCkVUCmVuZHN0cmVhbQplbmRvYmoKCnhyZWYKMCA1CjAwMDAwMDAwMDAgNjU1MzUgZgowMDAwMDAwMDEwIDAwMDAwIG4KMDAwMDAwMDA2MCAwMDAwMCBuCjAwMDAwMDAxNTcgMDAwMDAgbgowMDAwMDAwMjcxIDAwMDAwIG4KdHJhaWxlcgo8XAogIC9TaXplIDUKICAvUm9vdCAxIDAgUgo+PgpzdGFydHhyZWYKMzcyCiUlRU9GCg==',
+            fileType: 'application/pdf'
         },
         { title: "Programming With 'C'", author: 'Gottfried' },
         { title: 'Fundamentals of Computers', author: 'V. Rajaraman' },
@@ -101,6 +102,7 @@ async function initializeBooks() {
                         department: department,
                         description: book.description || `A comprehensive book on ${book.title} for ${department} students.`,
                         fileData: book.fileData || null,
+                        fileType: book.fileType || null,
                         addedAt: new Date().toISOString()
                     });
                 }
