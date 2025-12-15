@@ -3,61 +3,75 @@
 // Borrowing period in days
 const BORROWING_DAYS = 15;
 
+// Generate book cover SVG with unique colors
+function generateBookCover(title, dept) {
+    const colors = {
+        'computer-science': ['#6366f1', '#8b5cf6', '#a78bfa'],
+        'mechanical': ['#f59e0b', '#d97706', '#fbbf24'],
+        'mining': ['#10b981', '#059669', '#34d399']
+    };
+    const deptColors = colors[dept] || colors['computer-science'];
+    const hash = title.split('').reduce((a, b) => ((a << 5) - a) + b.charCodeAt(0), 0);
+    const bgColor = deptColors[Math.abs(hash) % 3];
+    const initial = title.charAt(0).toUpperCase();
+
+    return `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="120" height="180" viewBox="0 0 120 180"><rect fill="${bgColor}" width="120" height="180"/><rect fill="rgba(255,255,255,0.1)" x="10" y="10" width="100" height="160" rx="5"/><text x="60" y="100" font-family="Arial,sans-serif" font-size="48" font-weight="bold" fill="white" text-anchor="middle">${initial}</text><text x="60" y="130" font-family="Arial,sans-serif" font-size="8" fill="rgba(255,255,255,0.8)" text-anchor="middle">${dept.replace('-', ' ').toUpperCase()}</text></svg>`)}`;
+}
+
 // Books data organized by department (from Excel file LIB-25.xlsx)
 const DEPARTMENT_BOOKS = {
     'computer-science': [
-        { title: "Programming With 'C'", author: 'Gottfried', image: 'https://picsum.photos/seed/progc/120/180' },
-        { title: 'Fundamentals of Computers', author: 'V. Rajaraman', image: 'https://picsum.photos/seed/fundcomp/120/180' },
-        { title: 'IBM PC & Clones', author: 'Govindarajulu', image: 'https://picsum.photos/seed/ibmpc/120/180' },
-        { title: 'Introduction to Computers', author: 'Subramanyan', image: 'https://picsum.photos/seed/introcomp/120/180' },
-        { title: 'Digital Electronics & Introduction to Microprocessor', author: 'Kamat', image: 'https://picsum.photos/seed/digital/120/180' },
-        { title: 'Digital Fundamentals', author: 'Floyd', image: 'https://picsum.photos/seed/digfund/120/180' },
-        { title: 'Digital Principles & Applications', author: 'Malvino', image: 'https://picsum.photos/seed/digprin/120/180' },
-        { title: 'Microprocessors', author: 'Gaonkar', image: 'https://picsum.photos/seed/micro/120/180' },
-        { title: 'Computer Organisation & Architecture', author: 'Stallings', image: 'https://picsum.photos/seed/comporg/120/180' },
-        { title: 'Java Programming Language', author: 'Arnold', image: 'https://picsum.photos/seed/java/120/180' },
-        { title: 'Computer Networks', author: 'Tanenbaum', image: 'https://picsum.photos/seed/networks/120/180' },
-        { title: 'Operating Systems Concepts', author: 'Galvin', image: 'https://picsum.photos/seed/os/120/180' },
-        { title: 'Database System Concepts', author: 'Korth', image: 'https://picsum.photos/seed/database/120/180' },
-        { title: 'Let Us C', author: 'Kanetkar', image: 'https://picsum.photos/seed/letusc/120/180' },
-        { title: 'Data Structures Using C', author: 'Tanenbaum', image: 'https://picsum.photos/seed/datastruct/120/180' }
+        { title: "Programming With 'C'", author: 'Gottfried' },
+        { title: 'Fundamentals of Computers', author: 'V. Rajaraman' },
+        { title: 'IBM PC & Clones', author: 'Govindarajulu' },
+        { title: 'Introduction to Computers', author: 'Subramanyan' },
+        { title: 'Digital Electronics & Introduction to Microprocessor', author: 'Kamat' },
+        { title: 'Digital Fundamentals', author: 'Floyd' },
+        { title: 'Digital Principles & Applications', author: 'Malvino' },
+        { title: 'Microprocessors', author: 'Gaonkar' },
+        { title: 'Computer Organisation & Architecture', author: 'Stallings' },
+        { title: 'Java Programming Language', author: 'Arnold' },
+        { title: 'Computer Networks', author: 'Tanenbaum' },
+        { title: 'Operating Systems Concepts', author: 'Galvin' },
+        { title: 'Database System Concepts', author: 'Korth' },
+        { title: 'Let Us C', author: 'Kanetkar' },
+        { title: 'Data Structures Using C', author: 'Tanenbaum' }
     ],
     'mechanical': [
-        { title: 'Thermal Engineering in SI Units', author: 'P.L. Ballaney', image: 'https://picsum.photos/seed/thermal/120/180' },
-        { title: 'A Textbook of Mechanical Technology', author: 'R.S. Khurmi', image: 'https://picsum.photos/seed/mechtech/120/180' },
-        { title: 'Theory of Machines', author: 'R.S. Khurmi & J.K. Gupta', image: 'https://picsum.photos/seed/theoryma/120/180' },
-        { title: 'Production Technology', author: 'R.K. Jain', image: 'https://picsum.photos/seed/prodtech/120/180' },
-        { title: 'Engineering Drawing Vol.I', author: 'K.R. Gopalakrishna', image: 'https://picsum.photos/seed/engdraw/120/180' },
-        { title: 'A Textbook of Hydraulics & Fluid Mechanics', author: 'R.S. Khurmi', image: 'https://picsum.photos/seed/hydraul/120/180' },
-        { title: 'Workshop Technology Vol.I', author: 'Hajra Choudhury', image: 'https://picsum.photos/seed/workshop1/120/180' },
-        { title: 'Workshop Technology Vol.II', author: 'Hajra Choudhury', image: 'https://picsum.photos/seed/workshop2/120/180' },
-        { title: 'Machine Design', author: 'R.S. Khurmi', image: 'https://picsum.photos/seed/machdes/120/180' },
-        { title: 'Strength of Materials', author: 'R.K. Bansal', image: 'https://picsum.photos/seed/strength/120/180' },
-        { title: 'Refrigeration & Air Conditioning', author: 'P.L. Ballaney', image: 'https://picsum.photos/seed/refrig/120/180' },
-        { title: 'Internal Combustion Engines', author: 'Mathur', image: 'https://picsum.photos/seed/ice/120/180' },
-        { title: 'CAD/CAM', author: 'Groover', image: 'https://picsum.photos/seed/cadcam/120/180' },
-        { title: 'Mechatronics', author: 'Bolton', image: 'https://picsum.photos/seed/mechatron/120/180' },
-        { title: 'CNC Machines', author: 'Pabla', image: 'https://picsum.photos/seed/cnc/120/180' }
+        { title: 'Thermal Engineering in SI Units', author: 'P.L. Ballaney' },
+        { title: 'A Textbook of Mechanical Technology', author: 'R.S. Khurmi' },
+        { title: 'Theory of Machines', author: 'R.S. Khurmi & J.K. Gupta' },
+        { title: 'Production Technology', author: 'R.K. Jain' },
+        { title: 'Engineering Drawing Vol.I', author: 'K.R. Gopalakrishna' },
+        { title: 'A Textbook of Hydraulics & Fluid Mechanics', author: 'R.S. Khurmi' },
+        { title: 'Workshop Technology Vol.I', author: 'Hajra Choudhury' },
+        { title: 'Workshop Technology Vol.II', author: 'Hajra Choudhury' },
+        { title: 'Machine Design', author: 'R.S. Khurmi' },
+        { title: 'Strength of Materials', author: 'R.K. Bansal' },
+        { title: 'Refrigeration & Air Conditioning', author: 'P.L. Ballaney' },
+        { title: 'Internal Combustion Engines', author: 'Mathur' },
+        { title: 'CAD/CAM', author: 'Groover' },
+        { title: 'Mechatronics', author: 'Bolton' },
+        { title: 'CNC Machines', author: 'Pabla' }
     ],
     'mining': [
-        { title: 'Mine Environment and Ventilation', author: 'G.B. Misra', image: 'https://picsum.photos/seed/mineenv/120/180' },
-        { title: 'Mine Disasters and Mine Rescue', author: 'M.A. Ramulu', image: 'https://picsum.photos/seed/minedis/120/180' },
-        { title: 'Numerical Problems on Mine Ventilation', author: 'L.C. Kaku', image: 'https://picsum.photos/seed/minevent/120/180' },
-        { title: 'Elements of Mining Technology Vol.I', author: 'D.J. Deshmukh', image: 'https://picsum.photos/seed/minetech1/120/180' },
-        { title: 'Elements of Mining Technology Vol.II', author: 'D.J. Deshmukh', image: 'https://picsum.photos/seed/minetech2/120/180' },
-        { title: 'Elements of Mining Technology Vol.III', author: 'D.J. Deshmukh', image: 'https://picsum.photos/seed/minetech3/120/180' },
-        { title: 'Modern Coal Mining Technology', author: 'S.K. Das', image: 'https://picsum.photos/seed/coalmine/120/180' },
-        { title: 'Surface Mining Technology', author: 'S.K. Das', image: 'https://picsum.photos/seed/surface/120/180' },
-        { title: 'Underground Winning of Coal', author: 'T.N. Singh', image: 'https://picsum.photos/seed/undergr/120/180' },
-        { title: 'Explosion & Blasting Practices in Mines', author: 'S.K. Das', image: 'https://picsum.photos/seed/blasting/120/180' },
-        { title: 'Mine Surveying & Levelling Vol.I', author: 'S. Ghatak', image: 'https://picsum.photos/seed/survey1/120/180' },
-        { title: 'Mine Surveying & Levelling Vol.II', author: 'S. Ghatak', image: 'https://picsum.photos/seed/survey2/120/180' },
-        { title: 'SME Mining Engineering Handbook', author: 'Howard L. Hartman', image: 'https://picsum.photos/seed/sme/120/180' },
-        { title: 'Underground Mining Methods Handbook', author: 'W.A. Hustrulid', image: 'https://picsum.photos/seed/undermin/120/180' },
-        { title: 'Introductory Mining Engineering', author: 'Hartman', image: 'https://picsum.photos/seed/intromine/120/180' }
+        { title: 'Mine Environment and Ventilation', author: 'G.B. Misra' },
+        { title: 'Mine Disasters and Mine Rescue', author: 'M.A. Ramulu' },
+        { title: 'Numerical Problems on Mine Ventilation', author: 'L.C. Kaku' },
+        { title: 'Elements of Mining Technology Vol.I', author: 'D.J. Deshmukh' },
+        { title: 'Elements of Mining Technology Vol.II', author: 'D.J. Deshmukh' },
+        { title: 'Elements of Mining Technology Vol.III', author: 'D.J. Deshmukh' },
+        { title: 'Modern Coal Mining Technology', author: 'S.K. Das' },
+        { title: 'Surface Mining Technology', author: 'S.K. Das' },
+        { title: 'Underground Winning of Coal', author: 'T.N. Singh' },
+        { title: 'Explosion & Blasting Practices in Mines', author: 'S.K. Das' },
+        { title: 'Mine Surveying & Levelling Vol.I', author: 'S. Ghatak' },
+        { title: 'Mine Surveying & Levelling Vol.II', author: 'S. Ghatak' },
+        { title: 'SME Mining Engineering Handbook', author: 'Howard L. Hartman' },
+        { title: 'Underground Mining Methods Handbook', author: 'W.A. Hustrulid' },
+        { title: 'Introductory Mining Engineering', author: 'Hartman' }
     ]
 };
-
 
 // Initialize books in database
 async function initializeBooks() {
@@ -76,13 +90,13 @@ async function initializeBooks() {
                         id: bookId++,
                         title: book.title,
                         author: book.author,
-                        image: book.image,
+                        image: generateBookCover(book.title, department),
                         department: department,
                         addedAt: new Date().toISOString()
                     });
                 }
             }
-            console.log('Books initialized in database with images');
+            console.log('Books initialized in database with SVG covers');
         } else {
             console.log(`Found ${existingBooks.length} existing books in database`);
         }
