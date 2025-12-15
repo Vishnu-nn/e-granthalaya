@@ -1259,9 +1259,29 @@ async function openBookReader(bookId, recordId) {
 
     // Check if book has file data (PDF)
     if (book.fileData && book.fileType === 'application/pdf') {
-        bodyEl.innerHTML = `
-            <iframe src="${book.fileData}" type="application/pdf"></iframe>
-        `;
+        // Convert Data URI to Blob to prevent 404 errors with long URIs
+        try {
+            const dataUri = book.fileData;
+            const byteString = atob(dataUri.split(',')[1]);
+            const mimeString = dataUri.split(',')[0].split(':')[1].split(';')[0];
+            const ab = new ArrayBuffer(byteString.length);
+            const ia = new Uint8Array(ab);
+            for (let i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+            const blob = new Blob([ab], { type: mimeString });
+            const blobUrl = URL.createObjectURL(blob);
+
+            bodyEl.innerHTML = `
+                <iframe src="${blobUrl}" style="width:100%; height:600px; border:none;"></iframe>
+            `;
+        } catch (e) {
+            console.error("Error creating PDF blob:", e);
+            // Fallback
+            bodyEl.innerHTML = `
+                <iframe src="${book.fileData}" type="application/pdf"></iframe>
+            `;
+        }
     } else {
         // Show book preview with external reading links
         const deptName = getDepartmentName(book.department);
