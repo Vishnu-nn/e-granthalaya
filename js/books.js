@@ -21,6 +21,13 @@ function generateBookCover(title, dept) {
 // Books data organized by department (from Excel file LIB-25.xlsx)
 const DEPARTMENT_BOOKS = {
     'computer-science': [
+        {
+            title: "E-Granthalaya User Manual",
+            author: 'System Admin',
+            description: 'Official user guide for the E-Granthalaya Library Management System. Learn how to borrow, return, and read books.',
+            // Minimal valid PDF base64
+            fileData: 'JVBERi0xLjcKCjEgMCBvYmogICUgZW50cnkgcG9pbnQKPDwKICAvVHlwZSAvQ2F0YWxvZwogIC9QYWdlcyAyIDAgUgo+PgplbmRvYmoKCjIgMCBvYmogICUgcGFnZXM9MQo8XAogIC9UeXBlIC9QYWdlcwogIC9LaWRzIFsgMyAwIFIgXQogIC9Db3VudCAxCj4+CmVuZG9iagoKMyAwIG9iaiAgJSBwYWdlPTEKPDwKICAvVHlwZSAvUGFnZQogIC9QYXJlbnQgMiAwIFIKICAvTWVkaWFCb3ggWyAwIDAgNTAwIDgwMCBdCiAgL0NvbnRlbnRzIDQgMCBSCj4+CmVuZG9iagoKNCAwIG9iagogIDw8IC9MZW5ndGggNTAgPj4Kc3RyZWFtCkJVCjEuMDAwIDAuMDAwIDAuMDAwIHJnCiBTZwovRjEgMzYgVGYKMSAwIDAgMSAxMCA3MDAgVG0KKEUtR3JhbnRoYWxheWEgVXNlciBNYW51YWwpIFRqCkVUCmVuZHN0cmVhbQplbmRvYmoKCnhyZWYKMCA1CjAwMDAwMDAwMDAgNjU1MzUgZgowMDAwMDAwMDEwIDAwMDAwIG4KMDAwMDAwMDA2MCAwMDAwMCBuCjAwMDAwMDAxNTcgMDAwMDAgbgowMDAwMDAwMjcxIDAwMDAwIG4KdHJhaWxlcgo8XAogIC9TaXplIDUKICAvUm9vdCAxIDAgUgo+PgpzdGFydHhyZWYKMzcyCiUlRU9GCg=='
+        },
         { title: "Programming With 'C'", author: 'Gottfried' },
         { title: 'Fundamentals of Computers', author: 'V. Rajaraman' },
         { title: 'IBM PC & Clones', author: 'Govindarajulu' },
@@ -92,6 +99,8 @@ async function initializeBooks() {
                         author: book.author,
                         image: generateBookCover(book.title, department),
                         department: department,
+                        description: book.description || `A comprehensive book on ${book.title} for ${department} students.`,
+                        fileData: book.fileData || null,
                         addedAt: new Date().toISOString()
                     });
                 }
